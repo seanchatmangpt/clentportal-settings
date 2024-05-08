@@ -1,0 +1,33 @@
+{
+  "common": {
+    "show": "Show",
+    "newPost": "New Post",
+    "active": "Active",
+    "change": "Change",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "publish": "Publish",
+    "save": "Save",
+    "draft": "Draft",
+    "scheduled": "Scheduled",
+    "published": "Published",
+    "actions": "Actions",
+    "archive": "Archive",
+    "delete": "Delete",
+    "edit": "Edit",
+    "settings": "Settings",
+    "updatedOn": "Updated on",
+    "blogPost": "Blog Post",
+    "category": "Category",
+    "author": "Author",
+    "status": "Status",
+    "errors": "Errors",
+    "all": "All",
+    "archived": " Archived",
+    "back": "Back",
+    "restore": "Restore this version",
+    "next": "Next",
+    "previous": "Previous",
+    "continue": "Continue"
+  }
+}

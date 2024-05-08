@@ -1,0 +1,12 @@
+.idea
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+hosting*
+firebase-debug.log
+
+.vercel
+vercel.json
+.vscode

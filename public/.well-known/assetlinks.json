@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "net.clientclub.app.kollab",
+      "sha256_cert_fingerprints": [
+        "2D:9B:4B:9C:B5:CC:75:CD:94:41:5D:AE:35:7A:3B:03:04:39:27:7E:C1:51:CE:3A:F8:03:20:15:6A:9B:24:1C"
+      ]
+    }
+  }
+]

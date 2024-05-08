@@ -1,0 +1,22 @@
+import config from './../config'
+const CLOUD_ASSETS_URL = `${config.ASSETS_URL}/assets`
+export const APP_LAUNCHER_ICON = `${CLOUD_ASSETS_URL}/app-launcher.svg`
+export const LANDING_PAGE_IMAGE = `${CLOUD_ASSETS_URL}/landing_page_image.svg`
+export const GROUP_BRANDING_ICON = `${CLOUD_ASSETS_URL}/group_branding.svg`
+export const FACEBOOK_ICON = `${CLOUD_ASSETS_URL}/facebook.svg`
+export const INSTAGRAM_ICON = `${CLOUD_ASSETS_URL}/instagram.svg`
+export const LINKEDIN_ICON = `${CLOUD_ASSETS_URL}/linkedin.svg`
+export const TWITTER_ICON = `${CLOUD_ASSETS_URL}/x-twitter.svg`
+export const YOUTUBE_ICON = `${CLOUD_ASSETS_URL}/youtube.svg`
+export const ARROW_ICON = `${CLOUD_ASSETS_URL}/arrow_icon.svg`
+export const HOME_ICON_WHITE = `${CLOUD_ASSETS_URL}/home_05_white.svg`
+export const TEAM_MEETING = `${CLOUD_ASSETS_URL}/team_meeting.svg`
+export const GROUP_BOOK = `${CLOUD_ASSETS_URL}/group_book.svg`
+export const COMMUNITIES_PEOPLE = `${CLOUD_ASSETS_URL}/communities_people.svg`
+export const GROUPS_CONNECTIONS = `${CLOUD_ASSETS_URL}/groups_connections.svg`
+export const COURSES_CAP = `${CLOUD_ASSETS_URL}/courses_cap.svg`
+export const MONEY_BAG = `${CLOUD_ASSETS_URL}/money_bag.svg`
+export const LOADER = `${CLOUD_ASSETS_URL}/NEW.json`
+export const LOADER_MEETING_ICON= `${CLOUD_ASSETS_URL}/meeting.svg`
+export const LOADING_PAGE_BLANK = `${CLOUD_ASSETS_URL}/loading_page_blank.png`
+export const LC_LOGO = `${CLOUD_ASSETS_URL}/LC_logo.svg`

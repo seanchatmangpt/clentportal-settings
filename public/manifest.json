@@ -1,0 +1,28 @@
+{
+  "name": "Kollab",
+  "color": "Default",
+  "icons": [
+    {
+      "src": "https://storage.googleapis.com/revex-client-portal-staging/assets/ic_app_logo_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://storage.googleapis.com/revex-client-portal-staging/assets/ic_app_logo_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    }
+  ],
+  "shortName": "wrapper",
+  "short_name": "Kollab",
+  "description": "Kollab",
+  "theme_color": "#fff",
+  "background_color": "#fff",
+  "start_url": "https://stagingportal.staging.clientclub.net/",
+  "display": "standalone",
+  "offline_enabled": true,
+  "id": "kollab",
+  "orientation": "portrait"
+}
