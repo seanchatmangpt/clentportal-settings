@@ -1,33 +1,38 @@
-const path = require('path')
-const { VueLoaderPlugin } = require('vue-loader')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { ModuleFederationPlugin } = require('webpack').container
-const webpack = require('webpack')
-const isProduction = process.env.NODE_ENV === 'production'
-const isStaging = process.env.NODE_ENV === 'staging'
+const path = require('path');
+const { VueLoaderPlugin } = require('vue-loader');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { ModuleFederationPlugin } = require('webpack').container;
+const webpack = require('webpack');
 
-const publicPath = 'http://localhost:3040/'
+const isProduction = process.env.NODE_ENV === 'production';
+const isStaging = process.env.NODE_ENV === 'staging';
+
+const publicPath = isProduction
+  ? 'https://storage.googleapis.com/client-app-revex-communities/clientportal/'
+  : isStaging
+  ? 'https://storage.googleapis.com/staging-client-app-revex-communities/clientportal/'
+  : 'http://localhost:3040/';
 
 module.exports = (env = {}) => ({
-  // mode: 'development',
-  // cache: false,
-  // devtool: isProduction ? 'hidden-source-map' : 'source-map',
-  // // optimization: {
-  // //   minimize: isProduction ? true : false,
-  // // },
-  // entry: './src/main.ts',
+  mode: 'development',
+  cache: false,
+  devtool: isProduction ? 'hidden-source-map' : 'source-map',
+  optimization: {
+    minimize: isProduction ? true : false,
+  },
+  entry: './src/main.ts',
   output: {
-    publicPath: 'http://localhost:3040/',
-    // chunkFilename: 'clientportal.[chunkhash].js',
-    // uniqueName: 'clientportalApp',
+    publicPath,
+    chunkFilename: 'clientportal.[chunkhash].js',
+    uniqueName: 'clientportalApp',
   },
   resolve: {
     extensions: ['.ts', '.vue', '.jsx', '.js', '.json'],
-    // alias: {
-    //   '@': path.resolve(__dirname, 'src'),
-    //   process: 'process/browser',
-    // },
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      process: 'process/browser',
+    },
   },
   module: {
     rules: [
@@ -66,40 +71,31 @@ module.exports = (env = {}) => ({
     ],
   },
   plugins: [
-    // new webpack.DefinePlugin({
-    //   'process.env': JSON.stringify(env),
-    // }),
-    new VueLoaderPlugin(),
-    new ModuleFederationPlugin({
-      name: 'remote',
-      filename: 'remoteEntry.js',
-      remotes: {},
-      exposes: {
-        './App': './src/App.vue',
-      },
-      
-      shared:require("./package.json").dependencies
-      // shared: {
-      //   ...deps,
-      //   vue: {
-      //     eager: true,
-      //     singleton: true,
-      //     requiredVersion: deps.vue,
-      //   },
-      // },
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(env),
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.resolve(__dirname, './index.html'),
-    // }),
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+    }),
+    new ModuleFederationPlugin({
+      name: 'clientPortalSettings',
+      filename: 'remoteEntry.js',
+      library: { type: 'var', name: 'clientPortalSettings' },
+      exposes: {
+        './AccountSetting': './src/pages/AccountSetting',
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './index.html'),
+    }),
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: false,
+      __VUE_PROD_DEVTOOLS__: false,
+    }),
   ],
   devServer: {
-    // static: {
-    //   directory: path.join(__dirname),
-    // },
     port: 3040,
-    // headers: {
-    //   'Access-Control-Allow-Origin': '*',
-    // },
     historyApiFallback: true,
   },
-})
+});
