@@ -66,11 +66,11 @@ export interface AppStore {
 
 export const useAppStore = defineStore('app', {
   state: (): AppStore => ({
-    locationId: (import.meta.env.VITE_LOCATION_ID as string) || '',
-    userId: (import.meta.env.VITE_USER_ID as string) || '',
-    userEmail: (import.meta.env.VITE_USER_EMAIL as string) || '',
-    token: (import.meta.env.VITE_TOKEN_ID as string) || '',
-    appType: import.meta.env.VITE_APP_TYPE || 'STANDALONE',
+    locationId: (process.env.VITE_LOCATION_ID as string) || '',
+    userId: (process.env.VITE_USER_ID as string) || '',
+    userEmail: (process.env.VITE_USER_EMAIL as string) || '',
+    token: (process.env.VITE_TOKEN_ID as string) || '',
+    appType: process.env.VITE_APP_TYPE || 'STANDALONE',
     companyId: '',
     timezone: '',
     redirectUrl: null,
@@ -190,6 +190,7 @@ export const useAppStore = defineStore('app', {
       this.currencySymbol = payload.currencySymbol
     },
     setProfileDetails(value) {
+      console.log(value, 'value>>>>')
       this.userId = value.contactId
       this.profileDetails.email = value.email
       this.profileDetails.userId = value.contactId

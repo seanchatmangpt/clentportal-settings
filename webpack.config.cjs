@@ -2,6 +2,7 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 const webpack = require('webpack');
 
@@ -9,9 +10,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isStaging = process.env.NODE_ENV === 'staging';
 
 const publicPath = isProduction
-  ? 'https://storage.googleapis.com/client-app-revex-communities/clientportal/'
+  ? 'https://preview-internal.clientclub.net/'
   : isStaging
-  ? 'https://storage.googleapis.com/staging-client-app-revex-communities/clientportal/'
+  ? 'https://staging.preview-internal.clientclub.net/'
   : 'http://localhost:3040/';
 
 module.exports = (env = {}) => ({
@@ -21,19 +22,30 @@ module.exports = (env = {}) => ({
   optimization: {
     minimize: isProduction ? true : false,
   },
-  entry: './src/main.ts',
+  entry:'./src/main.ts', // Main entry point
+    
   output: {
     publicPath,
     chunkFilename: 'clientportal.[chunkhash].js',
-    uniqueName: 'clientportalApp',
+    uniqueName: 'clientportalSettings',
   },
   resolve: {
     extensions: ['.ts', '.vue', '.jsx', '.js', '.json'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
       process: 'process/browser',
+       
     },
   },
+ 
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all',
+  //     minSize: 0,
+  //   },
+  // },
+
+
   module: {
     rules: [
       {
@@ -49,6 +61,10 @@ module.exports = (env = {}) => ({
         test: /\.svg$/,
         exclude: /node_modules/,
         loader: 'file-loader',
+      },
+      {
+        test: /\.html$/,
+        use: 'html-loader',
       },
       {
         test: /\.ts$/,
@@ -78,16 +94,28 @@ module.exports = (env = {}) => ({
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: './public/main-sw.js', to: 'main-sw.js' },
+        { from: './public/clientclub-sw.js', to: 'clientclub-sw.js' },
+        { from: './public/firebase-messaging-sw.js', to: 'firebase-messaging-sw.js' },
+        { from: './public/manifest.json', to: 'manifest.json' },
+      ],
+    }),
+    
     new ModuleFederationPlugin({
       name: 'clientPortalSettings',
       filename: 'remoteEntry.js',
-      library: { type: 'var', name: 'clientPortalSettings' },
       exposes: {
-        './AccountSetting': './src/pages/AccountSetting',
+        "./AccountSetting": "./src/components/account/AccountSettings.vue",
       },
+      // remotes: {
+      //   clientPortalPreview: 'clientPortalPreview@http://localhost:3030/remoteEntry.js',
+      // }
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './index.html'),
+      chunks: ['main'],
     }),
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: false,
@@ -95,7 +123,18 @@ module.exports = (env = {}) => ({
     }),
   ],
   devServer: {
+    static: {
+      directory: path.join(__dirname),
+    },
     port: 3040,
     historyApiFallback: true,
+    hot: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'X-Requested-With, content-type, Authorization',
+    },
   },
+ 
 });

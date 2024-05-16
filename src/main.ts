@@ -14,7 +14,6 @@ import VueGtag from 'vue-gtag'
 import { createI18n } from 'vue-i18n'
 import VOtpInput from 'vue3-otp-input'
 import App from './App.vue'
-import { downloadApp } from './helper/downloadApp'
 import { router } from './router'
 import './style.css'
 export const i18n = createI18n({

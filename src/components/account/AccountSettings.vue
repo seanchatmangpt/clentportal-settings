@@ -1,26 +1,60 @@
 <script lang="ts" setup>
-import { UIMenu, UITextLgMedium } from '@gohighlevel/ghl-ui'
+import { UIMenu, UISpin, UITextLgMedium } from '@gohighlevel/ghl-ui'
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, createApp, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '../../store/app'
 import ChangePassword from './ChangePassword.vue'
 import ProfileSetting from './ProfileSettings.vue'
 import SocialMedia from './SocialMedia.vue'
+import Cookies from 'js-cookie'
+import { router } from '../../router'
 import { NavBar } from '@gohighlevel/clientportal-core'
 import { logoutUser } from '@/util/logout'
 import { CLIENT_PORTAL_MENU_ITEM } from '../../helper/const'
+import { createPinia } from 'pinia'
+import App from '@/App.vue'
+import { inject } from 'vue'
+import { UserService } from '@/service'
+
+const app = createApp(App);
+const route = inject<any>('route')
+const pinia = createPinia();
+app.use(router);
+app.use(pinia);
 const store = useAppStore()
-const route = useRoute()
+
 const activeMenuItem = ref(CLIENT_PORTAL_MENU_ITEM.PROFILE)
 const tabs = new Set(Object.values(CLIENT_PORTAL_MENU_ITEM))
 const emit = defineEmits(['logout'])
-onMounted(async () => {
-  if (route.query?.activeTab && tabs.has(route.query.activeTab.toString())) {
-    activeMenuItem.value = route.query.activeTab.toString()
-  }
+// onMounted(async () => {
+  
+//   if (route.query?.activeTab && tabs.has(route.query.activeTab.toString())) {
+//     activeMenuItem.value = route.query.activeTab.toString()
+//   }
+// })
+
+onBeforeMount(async ()=>{
+ await getDataSettings()
 })
 
+async function getDataSettings() {
+  const cookie = await Cookies.get('cat')
+    //TODO: fix below issue/Commented due to delay in loading userdetails on accounts and nav bar , maybe store issue
+    // //Fetch user details if user is loggedIn
+    if (cookie) {
+      const cat = cookie || window.localStorage.getItem('cat')
+      const cookieData = cat ? JSON.parse(window.atob(cat)) : null
+      const userData = await UserService.fetchUserDetails({
+        userId: cookieData.contactId,
+        locationId: cookieData.locationId,
+      })
+      console.log('userData+++',userData,cookieData)
+      store.setProfileDetails({
+        ...userData.data,
+      })
+}
+}
 async function handleMenuItemClick(key: string) {
   activeMenuItem.value = key
 }
@@ -49,6 +83,8 @@ const menuOptions = [
     key: CLIENT_PORTAL_MENU_ITEM.CERTIFICATES,
   },
 ]
+
+console.log('store>>>>>>>>+++', store.profileDetails,store.profileDetails.bio ,  store.profileDetails.fullName)
 
 function receiveLogoutUser() {
   emit('logout', logoutUser())
@@ -81,7 +117,7 @@ function receiveLogoutUser() {
         </div>
       </div>
     </div>
-    <div class="lg:col-span-4">
+    <!-- <div class="lg:col-span-4">
       <div v-if="activeMenuItem === CLIENT_PORTAL_MENU_ITEM.PROFILE">
         <ProfileSetting />
       </div>
@@ -92,7 +128,7 @@ function receiveLogoutUser() {
         <SocialMedia />
       </div>
      
-    </div>
+    </div> -->
   </div>
 </template>
 <style>

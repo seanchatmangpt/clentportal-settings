@@ -17,5 +17,5 @@
     "lib": ["esnext", "dom"],
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "webpack.config.js", "webpack.config.js"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "webpack.config.cjs", "webpack.config.cjs"]
 }

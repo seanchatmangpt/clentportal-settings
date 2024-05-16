@@ -1,11 +1,5 @@
 import AccountSetting from '@/pages/AccountSetting.vue'
-import ForgotPassword from '@/pages/ForgotPassword.vue'
-import ResetPassword from '@/pages/ResetPassword.vue'
-import {
-  NotificationMobileView,
-  ProfileContainer,
-  isPwa,
-} from '@gohighlevel/clientportal-core'
+
 import Cookies from 'js-cookie'
 import {
   handleLoginWithLoginCode,
