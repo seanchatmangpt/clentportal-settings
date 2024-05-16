@@ -20,7 +20,7 @@ class Navigation {
         showOnMobile: true,
         showOnWeb: false,
         icon: () => h(Home05Icon),
-        selectedIcon: () => h(FillHomeSmileIcon),
+        selectedIcon: () => h(Home05Icon),
       },
       {
         name: 'Notifications',
@@ -29,7 +29,7 @@ class Navigation {
         showOnMobile: true,
         showOnWeb: false,
         icon: () => h(Bell02Icon),
-        selectedIcon: () => h(FillBellVue),
+        selectedIcon: () => h(Home05Icon),
       },
       {
         name: 'Profile',
@@ -38,7 +38,7 @@ class Navigation {
         showOnMobile: true,
         showOnWeb: false,
         icon: () => h(User02Icon),
-        selectedIcon: () => h(FillUsers02Icon),
+        selectedIcon: () => h(User02Icon),
       },
     ],
   })

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { UIMenu, UISpin, UITextLgMedium } from '@gohighlevel/ghl-ui'
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui'
-import { onMounted, ref, createApp, onBeforeMount } from 'vue'
+import { onMounted, ref, createApp, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '../../store/app'
 import ChangePassword from './ChangePassword.vue'
@@ -16,6 +16,7 @@ import { createPinia } from 'pinia'
 import App from '@/App.vue'
 import { inject } from 'vue'
 import { UserService } from '@/service'
+import { watch } from 'vue'
 
 const app = createApp(App);
 const route = inject<any>('route')
@@ -23,7 +24,8 @@ const pinia = createPinia();
 app.use(router);
 app.use(pinia);
 const store = useAppStore()
-
+const profileData = ref()
+const isLoading = ref(false)
 const activeMenuItem = ref(CLIENT_PORTAL_MENU_ITEM.PROFILE)
 const tabs = new Set(Object.values(CLIENT_PORTAL_MENU_ITEM))
 const emit = defineEmits(['logout'])
@@ -34,8 +36,12 @@ const emit = defineEmits(['logout'])
 //   }
 // })
 
-onBeforeMount(async ()=>{
+
+
+onMounted(async ()=>{
+  isLoading.value = true
  await getDataSettings()
+ isLoading.value = false
 })
 
 async function getDataSettings() {
@@ -49,10 +55,14 @@ async function getDataSettings() {
         userId: cookieData.contactId,
         locationId: cookieData.locationId,
       })
-      console.log('userData+++',userData,cookieData)
       store.setProfileDetails({
         ...userData.data,
       })
+
+      console.log('store>>>>>>>>+++', store.profileDetails)
+      profileData.value = store.profileDetails;
+      console.log('profileData+++',profileData.value,profileData.value.fullName)
+      return
 }
 }
 async function handleMenuItemClick(key: string) {
@@ -84,26 +94,26 @@ const menuOptions = [
   },
 ]
 
-console.log('store>>>>>>>>+++', store.profileDetails,store.profileDetails.bio ,  store.profileDetails.fullName)
+
 
 function receiveLogoutUser() {
   emit('logout', logoutUser())
 }
 </script>
 <template>
-  <div v-if="!store.profileDetails.fullName">
+  <div v-if="isLoading">
     <UISpin size="large" class="flex h-[80vh] min-w-48 items-center" />
   </div>
   <div
     v-else
     class="top-20 h-[80vh] max-w-[1440px] gap-4 lg:grid lg:w-[80vw] lg:grid-cols-5"
   >
-    <NavBar :store="store" @logout="receiveLogoutUser"> </NavBar>
+    <!-- <NavBar :store="store" @logout="receiveLogoutUser"> </NavBar> -->
 
     <div class="top-2 col-span-1 hidden lg:block">
       <div id="side-bar" class="sticky top-20 rounded">
         <div class="flex w-full flex-col">
-          <n-config-provider :theme-overrides="themeOverrides">
+          
             <div>
               <UITextLgMedium class="px-6">Account Settings</UITextLgMedium>
             </div>
@@ -113,7 +123,7 @@ function receiveLogoutUser() {
               :value="activeMenuItem"
             >
             </UIMenu>
-          </n-config-provider>
+         
         </div>
       </div>
     </div>
